@@ -76,32 +76,27 @@ current_path = os.path.dirname(os.path.realpath('__file__'))
 index = current_path.find(looking_for)
 root_path = current_path[:index + len(looking_for)]
 
-# importing the dataset
-dataset = pd.read_csv(root_path+'/datasets/Churn_Modelling.csv')
+# importing the dataset, specifying the seperator as ";"
+dataset = pd.read_csv(root_path+'/datasets/cars.csv', sep=';')
+print(dataset.shape)
 
-# get all rows and all columns 3 inclusive and 13 exclusive
-# column 13 is the result case or can call it y
-X = dataset.iloc[:, 3:13].values
-y = dataset.iloc[:, 13:].values
+# get rows start from row 1 (inclusive) and columns start from 1 inclusive
+X = dataset.iloc[1:, 1:].values
 
 # we can see that our dataset include some categorical data like
 # country names or gender, so we will convert this categorical data
 # to encoded or numerical data
-# first let's transform the country field, its column index is 1
-label_encoder_X1 = preprocessing.LabelEncoder()
-label_encoder_X1.fit(X[:, 1])
-X[:, 1] = label_encoder_X1.transform(X[:, 1])
+# let's transform the origin field, its column index is 7
+label_encoder_X7 = preprocessing.LabelEncoder()
+label_encoder_X7.fit(X[:, 7])
+X[:, 7] = label_encoder_X7.transform(X[:, 7])
+print(X)
 
-# then let's transform the gender field, its column index is 2
-label_encoder_X2 = preprocessing.LabelEncoder()
-label_encoder_X2.fit(X[:, 2])
-X[:, 2] = label_encoder_X2.transform(X[:, 2])
-
-# d categorical value type needs d-1 extra column
+# d categorical value type needs d extra column
 # for gender feature we have 2 categories male/female so we need d = 2 field,
 # he country type has 3 types Spain/France/Germany, for the country
 # feature we need d = 3 extra fields, so we need to use onehotencoder
-one_hot_encoder = preprocessing.OneHotEncoder(categorical_features = [1] ,sparse=True)
+one_hot_encoder = preprocessing.OneHotEncoder(categorical_features = [7] ,sparse=True)
 X = one_hot_encoder.fit_transform(X).toarray()
 X = X[:, :]
 X.tolist()

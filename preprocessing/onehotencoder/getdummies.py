@@ -68,7 +68,6 @@ __status__  = "Production"
 # importing the libraries
 import pandas as pd
 import os
-from sklearn import preprocessing
 
 # find the path to the dataset
 looking_for = 'ann-deep-learning'
@@ -76,19 +75,21 @@ current_path = os.path.dirname(os.path.realpath('__file__'))
 index = current_path.find(looking_for)
 root_path = current_path[:index + len(looking_for)]
 
-# importing the dataset
-dataset = pd.read_csv(root_path+'/datasets/Churn_Modelling.csv')
+# importing the dataset, specifying the seperator as ";"
+dataset = pd.read_csv(root_path+'/datasets/cars.csv', sep=';')
+print(dataset.shape)
 
 # print the dataset column names
 columns = dataset.columns
 print(columns)
 
 # columns for the one hot encoding using the pandas get_dummies method
-# this will add the fields "'Geography_France', 'Geography_Germany',
-# 'Geography_Spain', 'Gender_Female', 'Gender_Male'"
-cols_to_transform = [ 'Geography', 'Gender' ]
+# this will add the fields 'Origin_CAT', 'Origin_Europe', 'Origin_Japan',
+# 'Origin_US'
+cols_to_transform = [ 'Origin' ]
 dataset_with_dummies = pd.get_dummies(dataset, columns = cols_to_transform )
 
 # let's print the new dataset with the dummy fields
+# 'Origin_CAT', 'Origin_Europe', 'Origin_Japan','Origin_US'
 columns = dataset_with_dummies.columns
 print(columns)
